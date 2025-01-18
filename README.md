@@ -12,9 +12,17 @@ Before you begin, make sure your system meets the following requirements:
 - Database server (MySQL, PostgreSQL, SQLite, etc.)
 - Node.js and NPM (for front-end assets)
 
-## Installation Steps
 
-### Step 1: Clone the Repository
+## Import SQL
+
+- import taskmanagementsystem.sql to use default data set
+
+## Default UserName and Password
+
+- username : john@doe.com
+- username : 123456
+
+## Installation
 
 Clone the repository to your local machine using Git:
 
