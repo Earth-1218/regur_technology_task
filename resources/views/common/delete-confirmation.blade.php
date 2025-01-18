@@ -15,8 +15,8 @@
                      Are you sure?
                  </div>
                  <div class="modal-footer">
-                     <button type="submit" class="btn btn-danger" id="delete">Delete</button>
-                     <button type="button" class="btn btn-secondary" onclick="$('#confirm').modal('hide');"
+                     <button type="submit" class="btn bg-red btn-danger" id="delete">Delete</button>
+                     <button type="button" class="btn bg-green btn-secondary" onclick="$('#confirm').modal('hide');"
                          data-dismiss="modal">Cancel</button>
                  </div>
              </div>

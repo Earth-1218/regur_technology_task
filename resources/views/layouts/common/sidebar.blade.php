@@ -35,29 +35,6 @@
                      body.classList.toggle('sidebar-expanded');
                  });
              }
-
-             const academicDropdown = document.querySelector('.has-treeview');
-             const academicDropdownLink = academicDropdown.querySelector('.nav-link');
-             const academicDropdownMenu = academicDropdown.querySelector('.nav-treeview');
-
-             if (academicDropdownLink) {
-                 academicDropdownLink.addEventListener('click', (e) => {
-                     e.preventDefault();
-
-                     // Toggle the classes on a specific child element of the link
-                     const icon = academicDropdownLink.querySelector('.menu-dropdown'); // Replace '.icon-class' with the correct class
-                     if (icon) {
-                         icon.classList.toggle('fa-angle-left');
-                         icon.classList.toggle('fa-angle-down');
-                     }
-
-                     // Toggle the dropdown menu display
-                     if (academicDropdownMenu) {
-                         academicDropdownMenu.style.display = academicDropdownMenu.style.display === 'none' ?
-                             'block' : 'none';
-                     }
-                 });
-             }
          });
      </script>
  @endpush

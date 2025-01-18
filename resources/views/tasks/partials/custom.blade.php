@@ -1,4 +1,6 @@
 <script>
+    const jwtToken = "{{ Cookie::get('jwt_token') }}"; // Pass JWT token from the backend
+
     // jQuery function to toggle visibility of the buttons based on #ajaxSelection value
     $('#ajaxSelection').on('change', function() {
         if ($(this).val() === 'yes') {
@@ -18,8 +20,8 @@
 
     // Handle form submission (either Add or Edit)
     $('#taskForm').on('submit', function(e) {
-        e.preventDefault(); // Prevent default form submission behavior
 
+        e.preventDefault(); // Prevent default form submission behavior
         let isValid = true; // Flag to check if the form is valid
 
         // Validate Title
@@ -96,16 +98,15 @@
             const actionUrl = $(this).attr('action');
             const method = $(this).attr('method');
 
-            console.log(actionUrl, method)
-
             // Make an AJAX request to submit the form
             $.ajax({
                 url: actionUrl,
                 type: method,
                 data: formData,
                 headers: {
+                    'Authorization': `Bearer ${jwtToken}`, // jwtToken should be the value stored in cookies or elsewhere
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                    'content'), // CSRF token for Laravel
+                        'content'), // CSRF token for Laravel
                 },
                 success: function(response) {
                     // On success, hide the modal
@@ -122,7 +123,6 @@
                 },
                 error: function(xhr, status, error) {
                     console.error('Error:', error);
-                    
 
                     // Show an error message to the user
                     alert('An error occurred while updating the task. Please try again.');
@@ -131,7 +131,6 @@
         }
     });
 
-
     // This function is called when the "Edit" button is clicked
     function editTask(taskId) {
         // Make an AJAX request to fetch the task details
@@ -139,10 +138,20 @@
             url: '/api/tasks/' + taskId, // URL to get task details by ID
             type: 'GET',
             headers: {
+                'Authorization': `Bearer ${jwtToken}`, // jwtToken should be the value stored in cookies or elsewhere
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), // CSRF token for Laravel
             },
             success: function(response) {
                 // Assuming 'response' contains the task data
+
+                // Fill the modal form with task data
+                $('#title').val(response.data.title).prop('disabled', false);
+                $('#description').val(response.data.description).prop('disabled', false);
+                $('#due_date').val(response.data.due_date).prop('disabled', false);
+                $('#status').val(response.data.status).prop('disabled', false);
+                $('#category').val(response.data.category).prop('disabled', false);
+                $('#submitTask').prop('disabled', false);
+                
 
                 // Fill the modal form with task data
                 $('#title').val(response.data.title);
@@ -163,8 +172,84 @@
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
-            }
+
+                // Optionally show an error message to the user
+                alert('An error occurred while fetching task details. Please try again.');
+            },
         });
+    }
+
+    // This function is called when the "Show" button is clicked
+    function showTask(taskId) {
+        // Make an AJAX request to fetch the task details
+        $.ajax({
+            url: '/api/tasks/' + taskId, // URL to get task details by ID
+            type: 'GET',
+            headers: {
+                'Authorization': `Bearer ${jwtToken}`, // jwtToken should be the value stored in cookies or elsewhere
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), // CSRF token for Laravel
+            },
+            success: function(response) {
+                // Assuming 'response' contains the task data
+
+                // Fill the modal form with task data
+                $('#title').val(response.data.title).prop('disabled', true);
+                $('#description').val(response.data.description).prop('disabled', true);
+                $('#due_date').val(response.data.due_date).prop('disabled', true);
+                $('#status').val(response.data.status).prop('disabled', true);
+                $('#category').val(response.data.category).prop('disabled', true);
+                $('#submitTask').prop('disabled', true);
+
+                // Change the form action to just show the task (no update action needed)
+                $('#taskForm').attr('action', '#'); // No action for read-only form
+                $('#taskForm').attr('method', 'GET'); // Read-only method
+
+                // Update the modal title for showing the task
+                $('#taskModalLabel').text('Show Task Information');
+
+                // Show the modal
+                $('#taskModal').modal('show');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+
+                // Optionally show an error message to the user
+                alert('An error occurred while fetching task details. Please try again.');
+            },
+        });
+    }
+
+    // This function is called when the "Delete" button is clicked
+    function deleteTask(taskId) {
+        // Ask for confirmation before deleting
+        if (confirm("Are you sure you want to delete this task?")) {
+            // Make an AJAX request to delete the task
+            console.log(jwtToken);
+            $.ajax({
+                url: '/api/tasks/' + taskId, // URL to delete the task by ID
+                type: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${jwtToken}`, // jwtToken should be the value stored in cookies or elsewhere
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), // CSRF token for Laravel
+                },
+                success: function(response) {
+                    // On success, reload the DataTable
+                    if ($.fn.DataTable.isDataTable('#tasks-table')) {
+                        $('#tasks-table').DataTable().ajax.reload();
+                        $('#ajaxSelection').val('no');
+                    }
+
+                    // Optionally show a success message to the user
+                    // alert('Task has been deleted successfully!');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+
+                    // Optionally show an error message to the user
+                    alert('An error occurred while deleting the task. Please try again.');
+                },
+            });
+        }
     }
 
     // This function is called when the "Add" button is clicked

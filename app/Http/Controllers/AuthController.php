@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -35,12 +36,21 @@ class AuthController extends Controller
                 return redirect()->route('login')->withErrors(['error' => 'Invalid credentials']);
             }
 
-            // Set the token in a cookie
+            // Get the authenticated user
+            $user = auth()->user();
+            $user = User::find( $user->id);
+
+            // Save the JWT token in the api_token field
+            $user->api_token = $token;
+            $user->save();
+
+            // Set the token in a cookie and redirect to home
             return redirect()->route('home')->withCookie(cookie('jwt_token', $token, 60 * 24)); // 24-hour expiration
         } catch (JWTException $e) {
             return redirect()->route('login')->withErrors(['error' => 'Could not create token.']);
         }
     }
+
 
     // Register and redirect to home
     public function register(Request $request)
@@ -62,7 +72,8 @@ class AuthController extends Controller
             $token = JWTAuth::fromUser($user);
 
             // Set the token in a cookie
-            return redirect()->route('home')->withCookie(cookie('jwt_token', $token, 60 * 24)); // 24-hour expiration
+            $cookie = Cookie::make('jwt_token', $token, 60 * 24);
+            return redirect()->route('home')->withCookie($cookie); // 24-hour expiration
         } catch (JWTException $e) {
             return redirect()->route('register')->withErrors(['error' => 'Could not create token.']);
         }

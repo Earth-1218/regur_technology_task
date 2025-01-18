@@ -52,7 +52,7 @@
 
                     <!-- Submit -->
                     <div class="d-flex justify-content-end">
-                        <button type="submit" id="submitTask" class="btn bg-green btn-success">Add Task</button>
+                        <button type="submit" id="submitTask" class="btn bg-green btn-success">Save</button>
                     </div>
                 </form>
             </div>

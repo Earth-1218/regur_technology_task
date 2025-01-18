@@ -82,9 +82,9 @@ class TaskController extends Controller
     public function show(Task $task): JsonResponse
     {
         // Ensure the user is authorized to view the task
-        // if ($task->user_id !== Auth::id()) {
-        //     return response()->json(['error' => 'Unauthorized action.'], 403);
-        // }
+        if ($task->user_id !== Auth::id()) {
+            return response()->json(['error' => 'Unauthorized action.'], 403);
+        }
 
         return response()->json([
             'success' => true,
@@ -96,9 +96,9 @@ class TaskController extends Controller
     public function update(Request $request, Task $task): JsonResponse
     {
         // Ensure the user is authorized to update the task
-        // if ($task->user_id !== Auth::id()) {
-        //     return response()->json(['error' => 'Unauthorized action.'], 403);
-        // }
+        if ($task->user_id !== Auth::id()) {
+            return response()->json(['error' => 'Unauthorized action.'], 403);
+        }
 
         $request->validate([
             'title' => 'required|max:255',
@@ -128,9 +128,9 @@ class TaskController extends Controller
     public function destroy(Task $task): JsonResponse
     {
         // Ensure the user is authorized to delete the task
-        // if ($task->user_id !== Auth::id()) {
-        //     return response()->json(['error' => 'Unauthorized action.'], 403);
-        // }
+        if ($task->user_id !== Auth::id()) {
+            return response()->json(['error' => 'Unauthorized action.'], 403);
+        }
 
         $task->delete();
 
