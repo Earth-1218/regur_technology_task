@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 18, 2025 at 01:13 PM
+-- Generation Time: Jan 18, 2025 at 04:08 PM
 -- Server version: 8.0.30
 -- PHP Version: 7.3.33
 
@@ -114,8 +114,6 @@ CREATE TABLE `tasks` (
 --
 
 INSERT INTO `tasks` (`id`, `user_id`, `title`, `description`, `due_date`, `status`, `category`, `created_at`, `updated_at`) VALUES
-(1, 2, 'Hello', 'Description for Task 1', '2025-01-22', 'done', 'work', '2025-01-18 07:03:36', '2025-01-18 02:43:57'),
-(2, 2, 'Task 2', 'Description for Task 2', '2025-01-22', 'in_progress', 'personal', '2025-01-18 07:03:36', '2025-01-18 07:03:36'),
 (3, 2, 'Task 3', 'Description for Task 3', '2025-01-25', 'done', 'miscellaneous', '2025-01-18 07:03:36', '2025-01-18 07:03:36'),
 (4, 2, 'Task 4', 'Description for Task 4', '2025-01-28', 'todo', 'work', '2025-01-18 07:03:36', '2025-01-18 07:03:36'),
 (5, 2, 'Task 5', 'Description for Task 5', '2025-01-30', 'in_progress', 'personal', '2025-01-18 07:03:36', '2025-01-18 07:03:36'),
@@ -145,10 +143,12 @@ INSERT INTO `tasks` (`id`, `user_id`, `title`, `description`, `due_date`, `statu
 (29, 2, 'Task 29', 'Description for Task 29', '2025-03-20', 'in_progress', 'personal', '2025-01-18 07:03:36', '2025-01-18 07:03:36'),
 (30, 2, 'Task 30', 'Description test', '2025-03-22', 'done', 'miscellaneous', '2025-01-18 07:03:36', '2025-01-18 02:50:45'),
 (33, 2, 'Test', 'Test', '2024-12-12', 'todo', 'work', '2025-01-18 05:11:04', '2025-01-18 05:11:04'),
-(34, 2, 'Task completed', 'Task completed', '2025-12-12', 'in_progress', 'personal', '2025-01-18 05:12:22', '2025-01-18 05:12:22'),
+(34, 2, 'Task completed', 'Task completed', '2025-12-12', 'todo', 'personal', '2025-01-18 05:12:22', '2025-01-18 07:59:07'),
 (35, 2, 'Task completed', 'Task completed', '2025-12-12', 'in_progress', 'personal', '2025-01-18 05:12:22', '2025-01-18 05:12:22'),
 (36, 2, 'Test', 'Test', '2025-01-24', 'in_progress', 'work', '2025-01-18 05:58:12', '2025-01-18 06:03:09'),
-(37, 4, 'Test Task', 'Test Description', '2025-01-18', 'done', 'personal', '2025-01-18 07:25:04', '2025-01-18 07:25:28');
+(37, 4, 'Test Task', 'Test Description', '2025-01-18', 'done', 'personal', '2025-01-18 07:25:04', '2025-01-18 07:25:28'),
+(38, 5, 'test123', 'test123', '2025-01-21', 'in_progress', 'personal', '2025-01-18 07:57:24', '2025-01-18 07:57:45'),
+(39, 2, 'test', 'test', '2025-01-22', 'todo', 'miscellaneous', '2025-01-18 07:59:28', '2025-01-18 07:59:28');
 
 -- --------------------------------------------------------
 
@@ -163,6 +163,7 @@ CREATE TABLE `users` (
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `api_token` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -171,11 +172,12 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Ravi', 'ravimajithiya786@gmail.com', NULL, '$2y$12$tKBDGaKnblBF2yIYKJHm/.JPVjqJ8V8hTWfEBgzaEjqhezcz.BhUK', NULL, '2025-01-17 11:34:10', '2025-01-17 11:34:10'),
-(2, 'John', 'john@doe.com', NULL, '$2y$12$RDXEwvcE5n4rBlPXVYyQ2.VvF7qzdiAFf6z.DcKM4wn7KrorP1LRG', NULL, '2025-01-17 11:59:11', '2025-01-17 11:59:11'),
-(3, 'Ravi', 'ravimajithiya3287263@gmail.com', NULL, '$2y$12$moQRhZgD9BGkF6wZsDEAv.gJbLbUnsr9nTRxYfvJHhlWBJkn6eBgm', NULL, '2025-01-17 13:53:39', '2025-01-17 13:53:39'),
-(4, 'Ravi', 'ravimajithiya1122@gmail.com', NULL, '$2y$12$afG.WYF10LlRsFNQG81/p.kvrNjlSyQ/NlLp2qdtBn16eGyEFmVLe', NULL, '2025-01-18 07:24:35', '2025-01-18 07:24:35');
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `api_token`, `created_at`, `updated_at`) VALUES
+(1, 'Ravi', 'ravimajithiya786@gmail.com', NULL, '$2y$12$tKBDGaKnblBF2yIYKJHm/.JPVjqJ8V8hTWfEBgzaEjqhezcz.BhUK', NULL, NULL, '2025-01-17 11:34:10', '2025-01-17 11:34:10'),
+(2, 'John', 'john@doe.com', NULL, '$2y$12$RDXEwvcE5n4rBlPXVYyQ2.VvF7qzdiAFf6z.DcKM4wn7KrorP1LRG', NULL, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvbG9naW4iLCJpYXQiOjE3MzcyMTU0ODIsImV4cCI6MTczNzIxOTA4MiwibmJmIjoxNzM3MjE1NDgyLCJqdGkiOiJpQXFXYWd4aEg4YjJRRDNGIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.Qizw0m6Di6WNz3IwBFwSQp7X3s2ld2ZLRk1XKoYMeQI', '2025-01-17 11:59:11', '2025-01-18 10:21:22'),
+(3, 'Ravi', 'ravimajithiya3287263@gmail.com', NULL, '$2y$12$moQRhZgD9BGkF6wZsDEAv.gJbLbUnsr9nTRxYfvJHhlWBJkn6eBgm', NULL, NULL, '2025-01-17 13:53:39', '2025-01-17 13:53:39'),
+(4, 'Ravi', 'ravimajithiya1122@gmail.com', NULL, '$2y$12$afG.WYF10LlRsFNQG81/p.kvrNjlSyQ/NlLp2qdtBn16eGyEFmVLe', NULL, NULL, '2025-01-18 07:24:35', '2025-01-18 07:24:35'),
+(5, 'Ravi', 'admin@admin.com', NULL, '$2y$12$jrYMwqVYWIBArU2naBOGYO/H97yTX5J1C4pKFh6cRr01ggcb9mSrG', NULL, NULL, '2025-01-18 07:56:50', '2025-01-18 07:56:50');
 
 --
 -- Indexes for dumped tables
@@ -248,13 +250,13 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
